@@ -27,20 +27,23 @@ class Asiento:#Super clase
     """En este caso en especial de los setters no hace falta asignarlo nuevamente
         dado que ya lo estamos haciedno con el if para el booleano"""
 
-#SubClases
+
+#SubClase AsientoEco
 class AsientoEco(Asiento):
     def __init__(self, num_asi, dispo, precio):
         super().__init__(num_asi, dispo)
         self.__precio = 50000 #se tienen que agregar un precio fijo
 
 #Sobreescritura de la subclase
-    def describir(self): #Con rdts funcion redefinimos lo que contiene cada contenido de los asientos
+    def describir(self): #Con esta funcion redefinimos lo que contiene cada contenido de los asientos
         return "Asiento Economico, - comodidad, - precio"
    
 #Getters de la subclase
     def get_precio(self):
         return self.__precio
 
+
+#SubClase AsientoNorm
 class AsientoNorm(Asiento):
     def __init__(self, num_asi, dispo, precio):
         super().__init__(num_asi, dispo)
@@ -52,8 +55,10 @@ class AsientoNorm(Asiento):
 
 #Sobreescritura de la subclase
     def describir(self):
-        return "Asiento Normal, + comodidad, +- precio"
-   
+        return "Asiento Normal, + comodidad, = precio"
+
+
+#SubClase AsientoPrem   
 class AsientoPrem(Asiento):
     def __init__(self, num_asi, dispo, precio):
         super().__init__(num_asi, dispo)
@@ -67,7 +72,7 @@ class AsientoPrem(Asiento):
     def describir(self):
         return "Asiento Premium, ++ comodidad, ++ precio"
    
-
+"""No se usan los setters en las subclases de los asientos dado que estan asignados como un valor fijo"""
 
 
 
