@@ -34,7 +34,7 @@ class AsientoEco(Asiento):
         self.__precio = 50000 #se tienen que agregar un precio fijo
 
 #Sobreescritura de la subclase
-    def describir(self): #Con el describir redefinimos lo que contiene cada contenido de los asientos
+    def describir(self): #Con rdts funcion redefinimos lo que contiene cada contenido de los asientos
         return "Asiento Economico, - comodidad, - precio"
    
 #Getters de la subclase
