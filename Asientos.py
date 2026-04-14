@@ -1,7 +1,8 @@
 class Asiento:#Super clase
-    def __init__(self, num_asi, dispo):
+    def __init__(self, num_asi, dispo, ubi):
         self.__num_asi = num_asi
         self.set_dispo(dispo)
+        self.__ubi = ubi
 
     def describir(self):
         return "Asiento común"
@@ -12,6 +13,9 @@ class Asiento:#Super clase
     
     def get_dispo(self):
         return self.__dispo
+    
+    def get_ubi(self):
+        return self.__ubi
 
 #Setters
     def set_dispo(self, new_dispo):
