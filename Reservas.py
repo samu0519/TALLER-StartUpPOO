@@ -1,46 +1,68 @@
-from Asiento import Asiento
+from Asientos import Asiento
 
-class Reservas:
-    def __init__(self, id_reserva, pasajero, vuelo, asiento):
-        self.__id_reserva = id_reserva
+class Reserva:
+    def __init__(self, cod_reserva, pasajero, vuelo, asiento):
+        """
+        cod_reserva: identificador único
+        pasajero: objeto Pasajero
+        vuelo: objeto Vuelo
+        asiento: objeto Asiento
+        """
+
+        self.__cod_reserva = cod_reserva
+
+        # Datos simples (para mostrar fácil)
+        self.__nombre = pasajero.get_nombre()
+        self.__destino = vuelo.get_destino()
+        self.__horario = vuelo.get_horario_vuelo()
+
+        # Objetos reales (para lógica del sistema)
         self.__pasajero = pasajero
         self.__vuelo = vuelo
         self.__asiento = asiento
 
-def get_id_reserva(self):
-        return self.__id_reserva
+   
+def get_cod_reserva(self):
+        return self.__cod_reserva
 
-def get_pasajero(self):
-        return self.__pasajero  
- 
-def get_vuelo(self):
-        return self.__vuelo
+def get_nombre(self):
+        return self.__nombre
 
-def get_asiento(self):      
-        return self.__asiento 
+def get_destino(self):
+        return self.__destino
 
+def get_horario(self):
+        return self.__horario
+
+def get_asiento(self):
+        return self.__asiento
+
+  
 def confirmar_reserva(self):
-    if self.__asiento.reservar(): 
-        print("Reserva confirmada para el pasajero")
-        return True
-    else:
-        print("El asiento está no disponible")
-        return False
-    
+        """
+        Intenta reservar el asiento.
+        Evita sobreventa.
+        """
+        if self.__asiento.reservar():
+            print("Reserva confirmada")
+            return True
+        else:
+            print("Asiento no disponible")
+            return False
+
 def cancelar_reserva(self):
         """
-        Libera el asiento asociado a la reserva.
-        Se usa cuando el usuario cancela.
+        Libera el asiento
         """
         self.__asiento.liberar()
-        print("Reserva cancelada correctamente")
+        print("Reserva cancelada")
 
 def mostrar_reserva(self):
         print("----- RESERVA -----")
-        print(f"ID Reserva: {self.__id_reserva}")
-        print(f"Pasajero: {self.__pasajero.get_nombre()}")
-        print(f"Documento: {self.__pasajero.get_id()}")
-        print(f"Destino: {self.__vuelo.get_destino()}")
+        print(f"Código: {self.__cod_reserva}")
+        print(f"Nombre: {self.__nombre}")
+        print(f"Destino: {self.__destino}")
+        print(f"Horario: {self.__horario}")
         print(f"Asiento: {self.__asiento.get_num_asi()}")
         print(f"Ubicación: {self.__asiento.get_ubi()}")
         print(f"Tipo: {self.__asiento.describir()}")
