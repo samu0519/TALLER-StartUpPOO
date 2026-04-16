@@ -1,11 +1,13 @@
 from Asientos import AsientoEco, AsientoNorm, AsientoPrem
 
 class Vuelo:
-    def __init__(self, id_vuelo, horario_vuelo, destino, fecha):
+    def __init__(self, id_vuelo, horario_vuelo, destino, fecha, hora_despe, hora_at):
         self.__id_vuelo = id_vuelo
         self.__horario_vuelo = horario_vuelo
         self.__destino = destino
         self.__fecha = fecha
+        self.__fecha = hora_despe
+        self.__fecha = hora_at
         self.__lista_asiento = []
         """Se hace uso de la lista para aglomerar la cantidad de asientos que poseemos y sus diferentes caracteristicas
         """
@@ -74,6 +76,13 @@ class Vuelo:
     
     def get_fecha(self):
         return self.__fecha
+    
+    def get_hora_despe(self):
+        return self.__hora_despe
+
+    def get_hora_at(self):
+        return self.__hora_at
+
 
     def mostrar_asientos(self):
         for asiento in self.__lista_asiento:
