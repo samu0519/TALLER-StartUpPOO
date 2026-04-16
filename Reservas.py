@@ -95,7 +95,7 @@ class Reserva:
         print(f"Horario: {self.__horario}")
         print(f"Fecha: {self.__fecha}")
         print(f"Hora de despegue: {self.__hora_despe}")
-        print(f"Hora aterrizaje: {self.__hora_at}")
+        print(f"Hora de aterrizaje: {self.__hora_at}")
         print(f"Asiento: {self.__asiento.get_num_asi()}")
         print(f"Ubicación: {self.__asiento.get_ubi()}")
         print(f"Tipo: {self.__asiento.describir()}")
