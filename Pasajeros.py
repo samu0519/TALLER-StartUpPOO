@@ -46,7 +46,7 @@ class Pasajero:
        
         if not new_numtlf.isdigit(): #isdigit verifica los caracteres sean numeros dentro de un caracter tipo str
             raise ValueError("Solo se permiten números")
-        if not len(new_numtlf) == 12: #Len lee longitud del string en numeros
+        if not len(new_numtlf) == 10: #Len lee longitud del string en numeros
             raise ValueError("Número no valido")
         self.__numtlf = new_numtlf
         """Se aplica raise para que tome el valor de error y detenga el programa"""
