@@ -32,6 +32,18 @@ class Asiento:#Super clase
         dado que ya lo estamos haciedno con el if para el booleano"""
 
 
+#Metodo gestionar disponibilidad de asietnos
+    def reservar(self):
+        """Marca el asiento como ocupado. Retorna True si se pudo reservar."""
+        if not self.__dispo:
+            return False
+        self.__dispo = False
+        return True
+ 
+    def liberar(self):
+        """Marca el asiento como disponible nuevamente."""
+        self.__dispo = True
+
 #SubClase AsientoEco
 class AsientoEco(Asiento):
     def __init__(self, num_asi, dispo, precio,ubi):
