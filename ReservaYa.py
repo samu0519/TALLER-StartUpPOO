@@ -88,3 +88,24 @@ def cargar_reservas():
             contador_cod = r_cod + 1
         cargadas += 1
     print(f" {cargadas} reserva(s) cargada(s) desde '{ARCHIVO_RESERVAS}'.")
+
+
+#Funciones del menu principal
+
+def mostrar_vuelo():
+    print("\n--------VUELOS DISPONIBLES -------")
+    for v in vuelos.values():
+        print(f"  [{v.get_id_vuelo()}]  {v.get_destino()}  |  Horario: {v.get_horario_vuelo()}   |  Hora Despegue: {v.get_hora_despe()}   |  Hora Aterrizaje: {v.get_hora_at()}")
+    print("------------------------------------")
+
+
+"""Se usa la verificacion del while para que le pida nuevamente el codigo de vuelo por si falla"""
+def seleccionar_vuelo():
+    mostrar_vuelo()
+    while True:
+        id_v = input("Ingrese el ID del vuelo: ").strip().upper()
+        if id_v not in vuelos:
+            print("Vuelo no encontrado, intente de nuevo.")
+        else:
+            return vuelos[id_v]
+
