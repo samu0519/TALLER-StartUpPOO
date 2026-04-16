@@ -28,7 +28,7 @@ class Reserva:
         self.__nombre = pasajero.get_nombre()
         self.__destino = vuelo.get_destino()
         self.__horario = vuelo.get_horario_vuelo()
-        self.__horario = vuelo.fecha()
+        self.__horario = vuelo.get_fecha()
 
         # Objetos reales (para lógica del sistema)
         self.__pasajero = pasajero
