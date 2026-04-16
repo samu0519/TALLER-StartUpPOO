@@ -92,6 +92,7 @@ class Reserva:
                 print(f"Nombre: {self.__nombre}")
                 print(f"Destino: {self.__destino}")
                 print(f"Horario: {self.__horario}")
+                print(f"Fecha: {self.__fecha}")
                 print(f"Asiento: {self.__asiento.get_num_asi()}")
                 print(f"Ubicación: {self.__asiento.get_ubi()}")
                 print(f"Tipo: {self.__asiento.describir()}")
