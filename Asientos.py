@@ -46,7 +46,7 @@ class Asiento:#Super clase
 
 #SubClase AsientoEco
 class AsientoEco(Asiento):
-    def __init__(self, num_asi, dispo, precio,ubi):
+    def __init__(self, num_asi, dispo,ubi):
         super().__init__(num_asi, dispo, ubi)
         self.__precio = 50000 #se tienen que agregar un precio fijo
 
@@ -61,7 +61,7 @@ class AsientoEco(Asiento):
 
 #SubClase AsientoNorm
 class AsientoNorm(Asiento):
-    def __init__(self, num_asi, dispo, precio, ubi):
+    def __init__(self, num_asi, dispo, ubi):
         super().__init__(num_asi, dispo, ubi)
         self.__precio = 80000
 
@@ -76,7 +76,7 @@ class AsientoNorm(Asiento):
 
 #SubClase AsientoPrem   
 class AsientoPrem(Asiento):
-    def __init__(self, num_asi, dispo, precio, ubi):
+    def __init__(self, num_asi, dispo, ubi):
         super().__init__(num_asi, dispo, ubi)
         self.__precio = 120000
         
