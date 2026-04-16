@@ -151,3 +151,35 @@ def crear_reserva():
             print("Ese asiento está ocupado, intente de nuevo.")
         else:
             break
+
+#Datos de pasajeros
+while True:
+    try:
+        id = int(input("Digite el ID del pasajero (mín. 6 dígitos, Max. 12 dígitos): "))
+        break
+    except ValueError:
+        print("ID inválido, intente de nuevo.")
+
+while True:
+    nombre = input("Nombre completo: ")
+    if not nombre.replace(" ", "").isalpha():#con isalpha podremos verificar si se poseen solo caracteres de texto pero si tiene espacios lo marca invalido, para eso se utiliza el replace para eliminar temporalmente los espacios y el isalpha pueda trabajar 
+        print("Solo se permiten letras, intente de nuevo.")
+    else:
+        break
+
+
+while True:
+    try:
+        edad = int(input("Edad: "))
+        break
+    except ValueError:
+        print("Edad inválida, intente de nuevo.")
+
+while True:
+    numtlf = input("Teléfono (10 dígitos): ")
+    if not numtlf.isdigit() or len(numtlf) != 10: #isdigit verifica los caracteres sean numeros dentro de un caracter tipo str, Len lee longitud del string en numeros
+        print("Teléfono inválido, intente de nuevo.")
+    else:
+        break
+
+pasajero = Pasajero(id, nombre, edad, numtlf)d
