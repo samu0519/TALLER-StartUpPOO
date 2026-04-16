@@ -6,8 +6,8 @@ class Vuelo:
         self.__horario_vuelo = horario_vuelo
         self.__destino = destino
         self.__fecha = fecha
-        self.__fecha = hora_despe
-        self.__fecha = hora_at
+        self.__hora_despe = hora_despe
+        self.__hora_at = hora_at
         self.__lista_asiento = []
         """Se hace uso de la lista para aglomerar la cantidad de asientos que poseemos y sus diferentes caracteristicas
         """

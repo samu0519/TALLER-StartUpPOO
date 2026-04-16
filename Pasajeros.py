@@ -1,7 +1,6 @@
 class Pasajero:
     def __init__(self, id, nombre, edad, numtlf):
-        if id < 12:
-            raise ValueError("Esa monda ta mala")
+        
         self.__id = id #Se asigna como privado
         self.set_nombre(nombre)
         self.set_edad(edad)

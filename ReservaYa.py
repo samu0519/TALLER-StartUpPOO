@@ -8,10 +8,10 @@ from Reservas import Reserva
 ARCHIVO_RESERVAS = "reservas.json"
 vuelos = {
     "V01": Vuelo("V01", "10:00", "Bogota - España", "Marzo 20/2025", "10:40", "21:00"),
-    "V02": Vuelo("V02", "14:30", "Bogota - Alemania", "Abril 9/2025", "14:30", "6:00"),
-    "V03": Vuelo("V03", "06:15", "Bogota - Cali", "Diciembre 31/2025", "06:15", "7:15"),
-    "V04": Vuelo("V04", "21:30", "Bogota - Holanda", "Agosto 20/2025", "21:30", "16:30"),
-    "V05": Vuelo("V05", "23:50", "Bogota - Medellin", "Octubre 1/2025", "23:50", "00:40")
+    "V02": Vuelo("V02", "14:30", "Bogota - Alemania", "Abril 9/2025", "14:50", "6:00"),
+    "V03": Vuelo("V03", "06:15", "Bogota - Cali", "Diciembre 31/2025", "06:35", "7:15"),
+    "V04": Vuelo("V04", "21:30", "Bogota - Holanda", "Agosto 20/2025", "21:55", "16:30"),
+    "V05": Vuelo("V05", "23:50", "Bogota - Medellin", "Octubre 1/2025", "00:00", "00:40")
 
 }
 
@@ -25,7 +25,7 @@ def guardar_reserva():
     datos = [] #se crea una lista para guardar los datos que se usaran en json
 
     for g in reservas.values():
-        if g.get_estado == "ACTIVA":
+        if g.get_estado() == "ACTIVA":
             datos.append({
                 "cod_reserva": g.get_cod_reserva(),
                 "id_pasajero": g.get_pasajero().get_id(),
@@ -44,49 +44,49 @@ def guardar_reserva():
         json.dump(datos, f, indent=2, ensure_ascii=False) #dump guarda el archivo json y ensure_ascii hace que las tildes se lean
 
 def cargar_reservas():
-    global contador_cod_re #Global se utiliza para usar una variable global en este caso seria el contador de reserva, se le pidio ayuda a la ia en esto porqu daba errore al usar return
+    global contador_cod_re 
     
-    if not os.path.exists(ARCHIVO_RESERVAS): #Lee si hay o no un archivo path
+    if not os.path.exists(ARCHIVO_RESERVAS):
         print("No se encontró archivo de reservas guardadas.")
         return
 
-    with open(ARCHIVO_RESERVAS, "r", encoding="utf-8") as f :
-        """Se hace uso del for para recorrer la lista de datos que se ha creado antes,
-           y se verifica si esta el id_vuelo, si no esta sigue con la proxima iteracion,
-           en caso que esxista guarda en la variable vuelo"""
-        datos = json.load(f)#Carga el archivo JSON, y lo convierte en una lista para una facil lectura
-    
-    cargadas = 0 # Con este contador sabemos cuantas reservas fueron cargadas
+    with open(ARCHIVO_RESERVAS, "r", encoding="utf-8") as f:
+        datos = json.load(f)  # Carga el archivo JSON, y lo convierte en una lista para una fácil lectura
+
+    cargadas = 0
+
     for d in datos:
         id_vuelo = d["id_vuelo"]
         if id_vuelo not in vuelos:
-            continue #omite el resto del código en la iteracion actual y salta a la siguiente iteracion
+            continue  # omite el resto del código en la iteración actual y salta a la siguiente iteración
+
         vuelo = vuelos[id_vuelo]
 
-# Buscar el asiento por número
-    """Recorre todos los asientos del vuelo buscando el que tiene el número guardado
-       cuanod lo encuentra, lo guarda en asiento, y si no encontro el asiento o ya está ocupado,
-       salta la reserva
-    """
-    asiento = None
-    for a in vuelo.get_lista_asiento():
-        if a.get_num_asi == d["num_asiento"]:
-            asiento = a
-            break
+        # Buscar el asiento por número
+        asiento = None
+        for a in vuelo.get_lista_asiento():
+            if a.get_num_asi() == d["num_asiento"]:
+                asiento = a
+                break
+
+        # Si no encontró asiento o está ocupado, salta
         if asiento is None or not asiento.get_dispo():
             continue
 
-        """En este bloque buscamos reorganizar los datos de el archivo json en el objeto reserva,
-        posteriormente llamamos a confrimar reserva para validar que el asiento efectivamente este bloqueado"""
+        """En este bloque buscamos reorganizar los datos del archivo json en el objeto reserva,
+        posteriormente llamamos a confirmar reserva para validar que el asiento efectivamente este bloqueado"""
 
         pasajero = Pasajero(d["id_pasajero"], d["nombre"], d["edad"], d["telefono"])
         r_cod = d["cod_reserva"]
         g = Reserva(r_cod, pasajero, vuelo, asiento)
-        g.confirmar_reserva()
+        asiento.reservar()
         reservas[r_cod] = g 
+
         if r_cod >= contador_cod_re:
             contador_cod_re = r_cod + 1
+
         cargadas += 1
+
     print(f" {cargadas} reserva(s) cargada(s) desde '{ARCHIVO_RESERVAS}'.")
 
 
@@ -153,18 +153,22 @@ def crear_reserva():
         else:
             break
 
-    # Datos de pasajeros
+# Datos de pasajeros
     while True:
         try:
             id = int(input("ID del pasajero (6 a 12 dígitos): "))
-            break
+
+            if 6 <= len(str(id)) <=10:
+                break
+            else:
+                print("Debe de tener entre 6 a 10 digitos")
         except ValueError:
-            print("ID inválido, intente de nuevo.")
+            print("ID inválido, debe de ser numerico")
 
     while True:
         nombre = input("Nombre completo: ")
         if not nombre.replace(" ", "").isalpha():
-            print("Solo se permiten letras, intente de nuevo.")
+            print("Solo se permiten letras, intente de nuevo")
         else:
             break
 
@@ -173,18 +177,18 @@ def crear_reserva():
             edad = int(input("Edad: "))
             break
         except ValueError:
-            print("Edad inválida, intente de nuevo.")
+            print("Edad inválida, intente de nuevo")
 
     while True:
         numtlf = input("Teléfono (10 dígitos): ")
         if not numtlf.isdigit() or len(numtlf) != 10:
-            print("Teléfono inválido, intente de nuevo.")
+            print("Teléfono inválido, intente de nuevo")
         else:
             break
 
     pasajero = Pasajero(id, nombre, edad, numtlf)
 
-    # Crear y confirmar reserva
+# Crear y confirmar reserva
     try:
         r = Reserva(contador_cod_re, pasajero, vuelo, asiento)
 
@@ -213,10 +217,10 @@ def cancelar_reserva():
             cod = int(input("Código de reserva a cancelar: "))
             break
         except ValueError:
-            print("Código inválido, intente de nuevo.")
+            print("Código inválido, intente de nuevo")
 
     if cod not in reservas:
-        print("Reserva no encontrada.")
+        print("Reserva no encontrada")
         return
 
     reservas[cod].cancelar_reserva()

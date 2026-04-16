@@ -58,6 +58,9 @@ class Reserva:
 
     def get_asiento(self):
         return self.__asiento
+    
+    def get_estado(self):
+        return self.__estado
 
     def confirmar_reserva(self):
         """
