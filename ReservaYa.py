@@ -109,3 +109,45 @@ def seleccionar_vuelo():
         else:
             return vuelos[id_v]
 
+
+def mostrar_asientos_dispo(vuelo):
+    print(f"\n── Asientos disponibles en vuelo {vuelo.get_id_vuelo()} ──")
+    print(f"{'N°':<5} {'Tipo':<45} {'Ubicación':<10} {'Precio':>10}")
+    print("-" * 75)
+    hay = False
+    for a in vuelo.get_lista_asiento():
+        if a.get_dispo():
+            print(f"{a.get_num_asi():<5} {a.describir():<45} {a.get_ubi():<10} ${a.get_precio():>9,}")
+            hay = True
+    if not hay:
+        print("  No hay asientos disponibles.")
+    
+
+"""Creamos la funcion para reservar el asiento y su debida restriccion a la hora de añadir algo 
+    incorrecto, a su vez verifica si el asiento esta disponible o no"""
+def crear_reserva():
+    global contador_cod
+    vuelo = seleccionar_vuelo()
+    if vuelo is None:
+        return
+
+    mostrar_asientos_dispo(vuelo)
+
+    while True:
+        try:
+            num = int(input("Número de asiento deseado: "))
+        except ValueError:
+            print("Número inválido, intente de nuevo.")
+            continue
+
+        asiento = None
+        for a in vuelo.get_lista_asiento():
+            if a.get_num_asi() == num:
+                asiento = a
+            break
+        if asiento is None:
+            print("Asiento no encontrado, intente de nuevo.")
+        elif not asiento.get_dispo():
+            print("Ese asiento está ocupado, intente de nuevo.")
+        else:
+            break
