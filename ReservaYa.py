@@ -41,7 +41,7 @@ def guardar_reserva():
        despues lo guarda el archivo en la variable f
 """
     with open(ARCHIVO_RESERVAS, "w", encoding="utf-8") as f: #with open cierra automáticamente al salir del bloque
-        json.dump(datos, f, indent=2, ensure_ascii=False) #dump guarda el archivo json
+        json.dump(datos, f, indent=2, ensure_ascii=False) #dump guarda el archivo json y ensure_ascii hace que las tildes se lean
 
 def cargar_reservas():
     global contador_cod_re #Global se utiliza para usar una variable global en este caso seria el contador de reserva, se le pidio ayuda a la ia en esto porqu daba errore al usar return
@@ -51,6 +51,16 @@ def cargar_reservas():
         return
 
     with open(ARCHIVO_RESERVAS, "r", encoding="utf-8") as f :
+        
+        """Se hace uso del for para recorrer la lista de datos que se ha creado antes,
+           y se verifica si esta el id_vuelo, si no esta sigue con la proxima iteracion,
+           en caso que esxista guarda en la variable vuelo"""
         datos = json.load(f)#Carga el archivo JSON, y lo convierte en una lista para una facil lectura
+    cargadas = 0
+    for d in datos:
+        id_vuelo = d["id_vuelo"]
+        if id_vuelo not in vuelos:
+            continue #omite el resto del código en la iteracion actual y salta a la siguiente iteracion
+        vuelo = vuelos[id_vuelo]
 
 
