@@ -206,9 +206,10 @@ def consultar_reservas():
     if not reservas:
         print("No hay reservas registradas.")
         return
-    print(f"\------- TODAS LAS RESERVAS ({len(reservas)}) ------")
+    print(f"\n------- RESERVAS ACTIVAS ({len(reservas)}) ------")
     for r in reservas.values():
-        r.mostrar_reserva()
+        if r.get_estado() == "ACTIVA":
+            r.mostrar_reserva()
 
 
 def cancelar_reserva():
