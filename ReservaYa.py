@@ -5,7 +5,7 @@ from Vuelos import Vuelo
 from Reservas import Reserva
 
 #Datos globales que se usaran
-
+ARCHIVO_RESERVAS = "reservas.json"
 vuelos = {
     "V01": Vuelo("V01", "10:00", "Bogota - España", "Marzo 20/2025", "10:40", "21:00"),
     "V02": Vuelo("V02", "14:30", "Bogota - Alemania", "Abril 9/2025", "14:30", "6:00"),
@@ -25,7 +25,7 @@ def guardar_reserva():
     datos = [] #se crea una lista para guardar los datos que se usaran en json
 
     for g in reservas.values():
-        if g.get_estado == "Activa":
+        if g.get_estado == "ACTIVA":
             datos.append({
                 "cod_reserva": g.get_cod_reserva(),
                 "id_pasajero": g.get_pasajero().get_id(),
@@ -70,7 +70,7 @@ def cargar_reservas():
     """
     asiento = None
     for a in vuelo.get_lista_asiento():
-        if a.get_lista_asiento == d["num_asiento"]:
+        if a.get_num_asi == d["num_asiento"]:
             asiento = a
             break
         if asiento is None or not asiento.get_dispo():
@@ -84,8 +84,8 @@ def cargar_reservas():
         g = Reserva(r_cod, pasajero, vuelo, asiento)
         g.confirmar_reserva()
         reservas[r_cod] = g 
-        if r_cod >= contador_cod:
-            contador_cod = r_cod + 1
+        if r_cod >= contador_cod_re:
+            contador_cod_re = r_cod + 1
         cargadas += 1
     print(f" {cargadas} reserva(s) cargada(s) desde '{ARCHIVO_RESERVAS}'.")
 
@@ -126,13 +126,13 @@ def mostrar_asientos_dispo(vuelo):
 """Creamos la funcion para reservar el asiento y su debida restriccion a la hora de añadir algo 
     incorrecto, a su vez verifica si el asiento esta disponible o no"""
 def crear_reserva():
-    global contador_cod
+    global contador_cod_re
     vuelo = seleccionar_vuelo()
     if vuelo is None:
         return
-
     mostrar_asientos_dispo(vuelo)
 
+#Seleccionar asiento
     while True:
         try:
             num = int(input("Número de asiento deseado: "))
@@ -144,7 +144,8 @@ def crear_reserva():
         for a in vuelo.get_lista_asiento():
             if a.get_num_asi() == num:
                 asiento = a
-            break
+                break  # 
+
         if asiento is None:
             print("Asiento no encontrado, intente de nuevo.")
         elif not asiento.get_dispo():
@@ -152,34 +153,114 @@ def crear_reserva():
         else:
             break
 
-#Datos de pasajeros
-while True:
+    # Datos de pasajeros
+    while True:
+        try:
+            id = int(input("ID del pasajero (6 a 12 dígitos): "))
+            break
+        except ValueError:
+            print("ID inválido, intente de nuevo.")
+
+    while True:
+        nombre = input("Nombre completo: ")
+        if not nombre.replace(" ", "").isalpha():
+            print("Solo se permiten letras, intente de nuevo.")
+        else:
+            break
+
+    while True:
+        try:
+            edad = int(input("Edad: "))
+            break
+        except ValueError:
+            print("Edad inválida, intente de nuevo.")
+
+    while True:
+        numtlf = input("Teléfono (10 dígitos): ")
+        if not numtlf.isdigit() or len(numtlf) != 10:
+            print("Teléfono inválido, intente de nuevo.")
+        else:
+            break
+
+    pasajero = Pasajero(id, nombre, edad, numtlf)
+
+    # Crear y confirmar reserva
     try:
-        id = int(input("Digite el ID del pasajero (mín. 6 dígitos, Max. 12 dígitos): "))
-        break
-    except ValueError:
-        print("ID inválido, intente de nuevo.")
+        r = Reserva(contador_cod_re, pasajero, vuelo, asiento)
 
-while True:
-    nombre = input("Nombre completo: ")
-    if not nombre.replace(" ", "").isalpha():#con isalpha podremos verificar si se poseen solo caracteres de texto pero si tiene espacios lo marca invalido, para eso se utiliza el replace para eliminar temporalmente los espacios y el isalpha pueda trabajar 
-        print("Solo se permiten letras, intente de nuevo.")
-    else:
-        break
+        if r.confirmar_reserva():
+            reservas[contador_cod_re] = r
+            contador_cod_re += 1
+            r.mostrar_reserva()
+        else:
+            print("No se pudo completar la reserva.")
+
+    except (ValueError, TypeError) as e:
+        print(f"Error al crear reserva: {e}")
+
+def consultar_reservas():
+    if not reservas:
+        print("No hay reservas registradas.")
+        return
+    print(f"\------- TODAS LAS RESERVAS ({len(reservas)}) ------")
+    for r in reservas.values():
+        r.mostrar_reserva()
 
 
-while True:
-    try:
-        edad = int(input("Edad: "))
-        break
-    except ValueError:
-        print("Edad inválida, intente de nuevo.")
+def cancelar_reserva():
+    while True:
+        try:
+            cod = int(input("Código de reserva a cancelar: "))
+            break
+        except ValueError:
+            print("Código inválido, intente de nuevo.")
 
-while True:
-    numtlf = input("Teléfono (10 dígitos): ")
-    if not numtlf.isdigit() or len(numtlf) != 10: #isdigit verifica los caracteres sean numeros dentro de un caracter tipo str, Len lee longitud del string en numeros
-        print("Teléfono inválido, intente de nuevo.")
-    else:
-        break
+    if cod not in reservas:
+        print("Reserva no encontrada.")
+        return
 
-pasajero = Pasajero(id, nombre, edad, numtlf)d
+    reservas[cod].cancelar_reserva()
+
+
+def consultar_disponibilidad():
+    vuelo = seleccionar_vuelo()
+    if vuelo is None:
+        return
+    mostrar_asientos_dispo(vuelo)
+
+#menu 
+
+def menu():
+    cargar_reservas()
+    while True:
+        print("""
+╔══════════════════════════════════════╗
+║    SISTEMA DE RESERVAS DE VUELOS     ║
+╠══════════════════════════════════════╣
+║  1. Crear reserva                    ║
+║  2. Consultar todas las reservas     ║
+║  3. Cancelar reserva                 ║
+║  4. Consultar disponibilidad         ║
+║  5. Guardar y salir                  ║
+╚══════════════════════════════════════╝""")
+        opcion = input("Seleccione una opción: ").strip()
+
+        if opcion == "1":
+            crear_reserva()
+        elif opcion == "2":
+            consultar_reservas()
+        elif opcion == "3":
+            cancelar_reserva()
+        elif opcion == "4":
+            consultar_disponibilidad()
+        elif opcion == "5":
+            guardar_reserva()
+            print("¡Hasta luego!")
+            break
+        else:
+            print("Opción inválida. Intente de nuevo.")
+
+
+if __name__ == "__main__":
+    menu()
+ 
