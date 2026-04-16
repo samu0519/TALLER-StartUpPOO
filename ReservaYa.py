@@ -51,16 +51,40 @@ def cargar_reservas():
         return
 
     with open(ARCHIVO_RESERVAS, "r", encoding="utf-8") as f :
-        
         """Se hace uso del for para recorrer la lista de datos que se ha creado antes,
            y se verifica si esta el id_vuelo, si no esta sigue con la proxima iteracion,
            en caso que esxista guarda en la variable vuelo"""
         datos = json.load(f)#Carga el archivo JSON, y lo convierte en una lista para una facil lectura
-    cargadas = 0
+    
+    cargadas = 0 # Con este contador sabemos cuantas reservas fueron cargadas
     for d in datos:
         id_vuelo = d["id_vuelo"]
         if id_vuelo not in vuelos:
             continue #omite el resto del código en la iteracion actual y salta a la siguiente iteracion
         vuelo = vuelos[id_vuelo]
 
+# Buscar el asiento por número
+    """Recorre todos los asientos del vuelo buscando el que tiene el número guardado
+       cuanod lo encuentra, lo guarda en asiento, y si no encontro el asiento o ya está ocupado,
+       salta la reserva
+    """
+    asiento = None
+    for a in vuelo.get_lista_asiento():
+        if a.get_lista_asiento == d["num_asiento"]:
+            asiento = a
+            break
+        if asiento is None or not asiento.get_dispo():
+            continue
 
+        """En este bloque buscamos reorganizar los datos de el archivo json en el objeto reserva,
+        posteriormente llamamos a confrimar reserva para validar que el asiento efectivamente este bloqueado"""
+
+        pasajero = Pasajero(d["id_pasajero"], d["nombre"], d["edad"], d["telefono"])
+        r_cod = d["cod_reserva"]
+        g = Reserva(r_cod, pasajero, vuelo, asiento)
+        g.confirmar_reserva()
+        reservas[r_cod] = g 
+        if r_cod >= contador_cod:
+            contador_cod = r_cod + 1
+        cargadas += 1
+    print(f" {cargadas} reserva(s) cargada(s) desde '{ARCHIVO_RESERVAS}'.")
