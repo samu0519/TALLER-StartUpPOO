@@ -5,28 +5,35 @@ from Vuelos import Vuelo
 class Reserva:
     def __init__(self, cod_reserva, pasajero, vuelo, asiento):
         
-        if not isinstance(cod_reserva, int) or cod_reserva <= 0:
+        if not isinstance(cod_reserva, int) or cod_reserva <= 0:  # Se utiliza isinstance() para verificar que los datos recibidos sean del tipo correcto.
             raise ValueError("Código de reserva inválido")
 
-        if not isinstance(pasajero, Pasajero):
-            raise TypeError("Pasajero inválido")
+        if not isinstance(pasajero, Pasajero):  # Por ejemplo isinstance(pasajero, Pasajero)
+            raise TypeError("Pasajero inválido")  # verifica que la variable pasajero sea un objeto de la clase Pasajero. Esto evita errores cuando se intentan usar métodos que no existen en otros tipos de datos.
 
         if not isinstance(vuelo, Vuelo):
-            raise TypeError("Vuelo inválido")
+            raise TypeError("Vuelo inválido")  # El raise permite generar errores de forma controlada cuando los datos no cumplen con las condiciones necesarias.
+                                             # Esto detiene la ejecución del programa
+                                             # y evita que el sistema continúe con información incorrecta.
 
         if not isinstance(asiento, Asiento):
             raise TypeError("Asiento inválido")
+            # Estas validaciones garantizan que los objetos se creen correctamente,
+            # evitando fallos en tiempo de ejecución y asegurando la integridad del sistema.
+            # Esto hace el programa más robusto y confiable.
 
         self.__cod_reserva = cod_reserva
         self.__estado = "ACTIVA"
 
-        # Datos simples
+        # Datos simples (para mostrar fácilmente)
         self.__nombre = pasajero.get_nombre()
         self.__destino = vuelo.get_destino()
         self.__horario = vuelo.get_horario_vuelo()
         self.__fecha = vuelo.get_fecha()
+        self.__hora_despe = vuelo.get_hora_despe()
+        self.__hora_at = vuelo.get_hora_at()
 
-        # Objetos reales
+        # Objetos reales (para lógica del sistema)
         self.__pasajero = pasajero
         self.__vuelo = vuelo
         self.__asiento = asiento
@@ -67,7 +74,7 @@ class Reserva:
 
         print("Error al reservar el asiento")
         return False
-
+        
     def cancelar_reserva(self):
         """
         Cancela la reserva si está activa
@@ -87,6 +94,8 @@ class Reserva:
         print(f"Destino: {self.__destino}")
         print(f"Horario: {self.__horario}")
         print(f"Fecha: {self.__fecha}")
+        print(f"Hora de despegue: {self.__hora_despe}")
+        print(f"Hora aterrizaje: {self.__hora_at}")
         print(f"Asiento: {self.__asiento.get_num_asi()}")
         print(f"Ubicación: {self.__asiento.get_ubi()}")
         print(f"Tipo: {self.__asiento.describir()}")
