@@ -19,6 +19,38 @@ reservas = {}
 contador_cod_re = 1
 
 
-print("ola")
-print("olasd")
-print("olas")
+#Funcion para guardar los archivos de reserva con json
+
+def guardar_reserva():
+    datos = [] #se crea una lista para guardar los datos que se usaran en json
+
+    for g in reservas.values():
+        if g.get_estado == "Activa":
+            datos.append({
+                "cod_reserva": g.get_cod_reserva(),
+                "id_pasajero": g.get_pasajero().get_id(),
+                "nombre":      g.get_pasajero().get_nombre(),
+                "edad":        g.get_pasajero().get_edad(),
+                "telefono":    g.get_pasajero().get_numtlf(),
+                "id_vuelo":    g.get_vuelo().get_id_vuelo(),
+                "num_asiento": g.get_asiento().get_num_asi()
+
+            })
+
+    """Se crea el archivo "reservas.json" en modo escritura (w), se hace uso del utf-8 para que permita tildes
+       despues lo guarda el archivo en la variable f
+"""
+    with open(ARCHIVO_RESERVAS, "w", encoding="utf-8") as f: #with open cierra automáticamente al salir del bloque
+        json.dump(datos, f, indent=2, ensure_ascii=False) #dump guarda el archivo json
+
+def cargar_reservas():
+    global contador_cod_re #Global se utiliza para usar una variable global en este caso seria el contador de reserva, se le pidio ayuda a la ia en esto porqu daba errore al usar return
+    
+    if not os.path.exists(ARCHIVO_RESERVAS): #Lee si hay o no un archivo path
+        print("No se encontró archivo de reservas guardadas.")
+        return
+
+    with open(ARCHIVO_RESERVAS, "r", encoding="utf-8") as f :
+        datos = json.load(f)#Carga el archivo JSON, y lo convierte en una lista para una facil lectura
+
+
